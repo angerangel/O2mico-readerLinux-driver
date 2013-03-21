@@ -1,0 +1,8 @@
+#!/bin/bash
+#Debug Build script
+
+make clean
+make debug=1
+make install
+depmod
+make clean

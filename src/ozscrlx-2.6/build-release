@@ -1,0 +1,8 @@
+#!/bin/bash
+#Release build script
+
+make clean
+make
+make install
+depmod
+make clean

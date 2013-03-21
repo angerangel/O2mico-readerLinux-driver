@@ -1,0 +1,65 @@
+#!/bin/bash
+# Configure script for OZSCR Smartcardbus Reader
+# Date: 2005/10/13
+
+act_kern=`uname -r`
+module_path=/lib/modules/$act_kern/pcmcia
+lib_path=/usr/local/o2micro
+pcsc_version=`pcscd -v | grep version | cut -b19-23`
+kern_release=`uname -r | sed -e 's,[^\.]*\.,,' -e 's,[^\.]*\.,,' -e 's,\..*,,' | cut -d- -f1`
+
+# Check if pcsclite daemon is installed
+if [ -f /usr/lib/libpcsclite.so ]; then
+        pcsclib=/usr/lib
+        echo "Found pcsclite $pcsc_version in "$pcsclib
+elif [ -f /usr/local/lib/libpcsclite.so ]; then
+        pcsclib=/usr/local/lib
+        echo "Found pcsclite $pcsc_version in "$pcsclib
+elif [ -d /usr/pcsc/lib ]; then
+        pcsclib=/usr/pcsc/lib
+        echo "Found pcsclite $pcsc_version in "$pcsclib
+elif [ -d /usr/local/pcsc/lib ]; then
+        pcsclib=/usr/local/pcsc/lib
+        echo "Found pcsclite $pcsc_version in "$pcsclib
+else
+        echo "Pcsclite not installed."
+        exit
+fi
+
+mkdir $lib_path &> /dev/null
+mkdir $module_path &> /dev/null
+
+if test -d /lib/modules/$act_kern/build/include
+then
+	echo "Found kernel $act_kern includes directory"
+	echo "I think that your is a 2.6 kernel version $kern_release "	
+	#if [ $kern_release -lt 13 ]
+	#then
+#		cd src/ozscrlx-2.6
+#	else
+		cd src/ozscrlx-2.6.13
+#	fi
+	echo "Building OZSCR modules..."
+	./build-debug
+	cd ../..
+else
+	echo "Kernel includes directory not found"
+	exit
+fi
+	
+echo "Copying files..."	
+	cp -f bin/debug/lib_OZSCR.so $lib_path
+	ldconfig -n $lib_path
+	cp -f etc/pcmcia/O2MICRO.conf /etc/pcmcia
+	cp -f etc/pcmcia/smartcardreader-ozscr /etc/pcmcia
+
+if test -f /etc/reader.conf
+then
+	 mv /etc/reader.conf /etc/reader.conf.bak
+	 echo "Old /etc/reader.conf backedup as /etc/reader.conf.bak"
+fi
+
+cp etc/reader.conf.$pcsc_version /etc/reader.conf
+
+echo "/etc/reader.conf updated"
+echo "OZSCR installation complete."

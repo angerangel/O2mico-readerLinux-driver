@@ -1,0 +1,17 @@
+Changes file for OZSCR PCMCIA SmartCardBus Reader Driver Kernel Module (Kernel 2.6)
+
+--------
+Version:        2.0.3	2005/10/13
+Author:         Jeffrey Dai
+Changes:
+Changed the configure-debug/configure-release file to check kernel version and see 
+if it's older then 2.6.13.  This is because PCMCIA module structure is changed in
+this version. Now there two src directories named ozscrlx-2.6 and ozscrlx-2.6.13.
+
+--------
+Version:	2.0.2
+Author:		Jeffrey Dai
+Changes:
+Updated codes for kernel 2.6.13.2 including removing pcmcia_get_card_services_info()
+call and cs_error prototype.
+

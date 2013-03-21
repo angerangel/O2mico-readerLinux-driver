@@ -1,0 +1,13 @@
+# Configuration file for pcsc-lite
+#
+# This file has to be configured for serial and PCMCIA readers only.
+# normal USB readers shall _not_ be configured here!
+#
+# David Corcoran <corcoran@linuxnet.com>
+
+FRIENDLYNAME            "O2Micro SmartCardBus Reader"
+DEVICENAME              /dev/ozscrlx
+LIBPATH                 /usr/local/o2micro/lib_OZSCR.so
+CHANNELID               0xF10000
+
+# End of file

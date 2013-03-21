@@ -1,0 +1,19 @@
+O2Micro OZSCR PCMCIA Smartcardbus Reader Driver for kernel 2.6 Install
+
+The driver has been tested with several 2.6 kernels and Pcsclite 1.2.9-beta6.
+                                                                                          
+Installation Procedure:
+
+Step 1: Install pcsclite-1.2.9-beta6 (http://pcsclite.alioth.debian.org/).
+
+Step 2: Execute ./configure-release (or ./configure-debug for debug mode) script.
+        This script does following tasks:
+        a. lib_OZSCR.so to directory /usr/local/o2micro
+        b. O2MICRO.conf file to /etc/pcmcia
+        c. smartcardreader-ozscr to /etc/pcmcia
+        d. Updates a new /etc/reader.conf. Old /etc/reader.conf is backuped as
+        /etc/reader.conf.bak
+        e. Compile ozscrlx.ko under directory ozscrlx-2.6/ozscrlx-2.6.13 for
+	kernel below/above 2.6.13 and copy it to /lib/modules/'uname -r'/pcmcia
+
+Step 3: Reboot your system.

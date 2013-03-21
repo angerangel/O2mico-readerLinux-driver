@@ -1,0 +1,48 @@
+#!/bin/sh
+#
+# ozscrlx 2005/07/15 15:16:18
+#
+# Initialize or shutdown a PCMCIA smartcardreader device
+#
+# The first argument should be either 'start' or 'stop'.  The second
+# argument is the base name for the device.
+#
+#
+
+if [ -r ./shared ] ; then . ./shared ; else . /etc/pcmcia/shared ; fi
+
+# Get device attributes
+get_info $DEVICE
+
+case "$ACTION" in
+
+'start')
+	rm -f /dev/${DEVICE}
+    	major=`grep ozscrlx /proc/devices | cut -c1-3`
+	mknod /dev/$DEVICE  c $major 0
+	chmod 664 /dev/$DEVICE
+    	;;
+
+'check')
+	fuser -k -s /dev/$DEVICE && exit 1
+    	;;
+
+'stop')
+	rm -f /dev/$DEVICE
+    	;;
+
+'suspend')
+	cardctl suspend
+    	;;
+
+'resume')
+	cardctl resume
+    	;;
+
+*)
+    	usage
+    	;;
+
+esac
+
+exit 0
